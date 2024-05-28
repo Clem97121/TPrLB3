@@ -87,6 +87,7 @@ class Program
         classroomCourse.Enroll();
         selfStudyCourse.Enroll();
 
-        Console.ReadLine(); 
+        Console.ReadLine();
+        Console.ReadLine();
     }
 }
