@@ -109,6 +109,58 @@ public class AdditionalMaterialDecorator : ICourse
     }
 }
 
+// Интерфейс стратегии обучения
+public interface ILearningStrategy
+{
+    void Learn();
+}
+
+// Конкретная стратегия обучения: лекции
+public class LectureLearningStrategy : ILearningStrategy
+{
+    public void Learn()
+    {
+        Console.WriteLine("Attending lectures...");
+    }
+}
+
+// Конкретная стратегия обучения: практические занятия
+public class PracticalLearningStrategy : ILearningStrategy
+{
+    public void Learn()
+    {
+        Console.WriteLine("Participating in practical sessions...");
+    }
+}
+
+// Конкретная стратегия обучения: тестирование
+public class TestingLearningStrategy : ILearningStrategy
+{
+    public void Learn()
+    {
+        Console.WriteLine("Taking tests...");
+    }
+}
+
+// Декоратор для добавления стратегии обучения к курсу
+public class LearningStrategyDecorator : ICourse
+{
+    private readonly ICourse _course;
+    private readonly ILearningStrategy _learningStrategy;
+
+    public LearningStrategyDecorator(ICourse course, ILearningStrategy learningStrategy)
+    {
+        _course = course;
+        _learningStrategy = learningStrategy;
+    }
+
+    public void Enroll()
+    {
+        _course.Enroll();
+        _learningStrategy.Learn();
+    }
+}
+
 // Клиентский код
 class Program
 {
@@ -119,10 +171,20 @@ class Program
         var classroomCourseFactory = new ClassroomCourseFactory();
         var selfStudyCourseFactory = new SelfStudyCourseFactory();
 
+        // Создание стратегий обучения
+        var lectureLearningStrategy = new LectureLearningStrategy();
+        var practicalLearningStrategy = new PracticalLearningStrategy();
+        var testingLearningStrategy = new TestingLearningStrategy();
+
         // Создание курсов через фабрики
         var onlineCourse = onlineCourseFactory.CreateCourse();
         var classroomCourse = classroomCourseFactory.CreateCourse();
         var selfStudyCourse = selfStudyCourseFactory.CreateCourse();
+
+        // Добавление стратегий обучения к курсам
+        onlineCourse = new LearningStrategyDecorator(onlineCourse, lectureLearningStrategy);
+        classroomCourse = new LearningStrategyDecorator(classroomCourse, practicalLearningStrategy);
+        selfStudyCourse = new LearningStrategyDecorator(selfStudyCourse, testingLearningStrategy);
 
         // Добавление дополнительных материалов к курсам
         onlineCourse = new AdditionalMaterialDecorator(onlineCourse, new VideoMaterial());
@@ -133,6 +195,6 @@ class Program
         classroomCourse.Enroll();
         selfStudyCourse.Enroll();
 
-        Console.ReadLine(); 
+        Console.ReadLine(); // Чтобы консольное окно не закрывалось сразу после выполнения кода
     }
 }
