@@ -1,45 +1,45 @@
 ﻿using System;
 
-// Интерфейс курса
+// Інтерфейс курсу
 public interface ICourse
 {
-    void Enroll();
+    void Enroll(); // Запис на курс
 }
 
-// Конкретный класс онлайн-курса
+// Конкретний клас онлайн-курсу
 public class OnlineCourse : ICourse
 {
     public void Enroll()
     {
-        Console.WriteLine("Enrolling in online course...");
+        Console.WriteLine("Запис на онлайн-курс...");
     }
 }
 
-// Конкретный класс курса в классе
+// Конкретний клас курсу в класі
 public class ClassroomCourse : ICourse
 {
     public void Enroll()
     {
-        Console.WriteLine("Enrolling in classroom course...");
+        Console.WriteLine("Запис на курс в аудиторії...");
     }
 }
 
-// Конкретный класс самоучителя
+// Конкретний клас самостійного навчання
 public class SelfStudyCourse : ICourse
 {
     public void Enroll()
     {
-        Console.WriteLine("Enrolling in self-study course...");
+        Console.WriteLine("Запис на самостійне навчання...");
     }
 }
 
-// Фабрика курсов
+// Фабрика курсів
 public interface ICourseFactory
 {
-    ICourse CreateCourse();
+    ICourse CreateCourse(); // Створення курсу
 }
 
-// Фабрика для создания онлайн-курсов
+// Фабрика для створення онлайн-курсів
 public class OnlineCourseFactory : ICourseFactory
 {
     public ICourse CreateCourse()
@@ -48,7 +48,7 @@ public class OnlineCourseFactory : ICourseFactory
     }
 }
 
-// Фабрика для создания курсов в классе
+// Фабрика для створення курсів в аудиторії
 public class ClassroomCourseFactory : ICourseFactory
 {
     public ICourse CreateCourse()
@@ -57,7 +57,7 @@ public class ClassroomCourseFactory : ICourseFactory
     }
 }
 
-// Фабрика для создания самоучителей
+// Фабрика для створення самостійних курсів
 public class SelfStudyCourseFactory : ICourseFactory
 {
     public ICourse CreateCourse()
@@ -66,31 +66,31 @@ public class SelfStudyCourseFactory : ICourseFactory
     }
 }
 
-// Интерфейс дополнительного материала
+// Інтерфейс додаткового матеріалу
 public interface IAdditionalMaterial
 {
-    void AddMaterial();
+    void AddMaterial(); // Додавання матеріалу
 }
 
-// Конкретный класс видеоурока
+// Конкретний клас відеоматеріалу
 public class VideoMaterial : IAdditionalMaterial
 {
     public void AddMaterial()
     {
-        Console.WriteLine("Adding video material...");
+        Console.WriteLine("Додавання відеоматеріалу...");
     }
 }
 
-// Конкретный класс учебного файла
+// Конкретний клас файлового матеріалу
 public class FileMaterial : IAdditionalMaterial
 {
     public void AddMaterial()
     {
-        Console.WriteLine("Adding file material...");
+        Console.WriteLine("Додавання файлового матеріалу...");
     }
 }
 
-// Декоратор для добавления дополнительных материалов к курсу
+// Декоратор для додавання додаткових матеріалів до курсу
 public class AdditionalMaterialDecorator : ICourse
 {
     private readonly ICourse _course;
@@ -109,40 +109,40 @@ public class AdditionalMaterialDecorator : ICourse
     }
 }
 
-// Интерфейс стратегии обучения
+// Інтерфейс стратегії навчання
 public interface ILearningStrategy
 {
-    void Learn();
+    void Learn(); // Навчання
 }
 
-// Конкретная стратегия обучения: лекции
+// Конкретна стратегія навчання: лекції
 public class LectureLearningStrategy : ILearningStrategy
 {
     public void Learn()
     {
-        Console.WriteLine("Attending lectures...");
+        Console.WriteLine("Участь у лекціях...");
     }
 }
 
-// Конкретная стратегия обучения: практические занятия
+// Конкретна стратегія навчання: практичні заняття
 public class PracticalLearningStrategy : ILearningStrategy
 {
     public void Learn()
     {
-        Console.WriteLine("Participating in practical sessions...");
+        Console.WriteLine("Участь у практичних заняттях...");
     }
 }
 
-// Конкретная стратегия обучения: тестирование
+// Конкретна стратегія навчання: тестування
 public class TestingLearningStrategy : ILearningStrategy
 {
     public void Learn()
     {
-        Console.WriteLine("Taking tests...");
+        Console.WriteLine("Проходження тестів...");
     }
 }
 
-// Декоратор для добавления стратегии обучения к курсу
+// Декоратор для додавання стратегії навчання до курсу
 public class LearningStrategyDecorator : ICourse
 {
     private readonly ICourse _course;
@@ -161,40 +161,40 @@ public class LearningStrategyDecorator : ICourse
     }
 }
 
-// Клиентский код
+// Клієнтський код
 class Program
 {
     static void Main(string[] args)
     {
-        // Создание фабрик
+        // Створення фабрик
         var onlineCourseFactory = new OnlineCourseFactory();
         var classroomCourseFactory = new ClassroomCourseFactory();
         var selfStudyCourseFactory = new SelfStudyCourseFactory();
 
-        // Создание стратегий обучения
+        // Створення стратегій навчання
         var lectureLearningStrategy = new LectureLearningStrategy();
         var practicalLearningStrategy = new PracticalLearningStrategy();
         var testingLearningStrategy = new TestingLearningStrategy();
 
-        // Создание курсов через фабрики
+        // Створення курсів через фабрики
         var onlineCourse = onlineCourseFactory.CreateCourse();
         var classroomCourse = classroomCourseFactory.CreateCourse();
         var selfStudyCourse = selfStudyCourseFactory.CreateCourse();
 
-        // Добавление стратегий обучения к курсам
+        // Додавання стратегій навчання до курсів
         onlineCourse = new LearningStrategyDecorator(onlineCourse, lectureLearningStrategy);
         classroomCourse = new LearningStrategyDecorator(classroomCourse, practicalLearningStrategy);
         selfStudyCourse = new LearningStrategyDecorator(selfStudyCourse, testingLearningStrategy);
 
-        // Добавление дополнительных материалов к курсам
+        // Додавання додаткових матеріалів до курсів
         onlineCourse = new AdditionalMaterialDecorator(onlineCourse, new VideoMaterial());
         classroomCourse = new AdditionalMaterialDecorator(classroomCourse, new FileMaterial());
 
-        // Запись на курсы
+        // Запис на курси
         onlineCourse.Enroll();
         classroomCourse.Enroll();
         selfStudyCourse.Enroll();
 
-        Console.ReadLine(); // Чтобы консольное окно не закрывалось сразу после выполнения кода
+        Console.ReadLine(); // Щоб консольне вікно не закривалося відразу після виконання коду
     }
 }
