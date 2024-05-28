@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 // Интерфейс курса
 public interface ICourse
@@ -67,6 +66,49 @@ public class SelfStudyCourseFactory : ICourseFactory
     }
 }
 
+// Интерфейс дополнительного материала
+public interface IAdditionalMaterial
+{
+    void AddMaterial();
+}
+
+// Конкретный класс видеоурока
+public class VideoMaterial : IAdditionalMaterial
+{
+    public void AddMaterial()
+    {
+        Console.WriteLine("Adding video material...");
+    }
+}
+
+// Конкретный класс учебного файла
+public class FileMaterial : IAdditionalMaterial
+{
+    public void AddMaterial()
+    {
+        Console.WriteLine("Adding file material...");
+    }
+}
+
+// Декоратор для добавления дополнительных материалов к курсу
+public class AdditionalMaterialDecorator : ICourse
+{
+    private readonly ICourse _course;
+    private readonly IAdditionalMaterial _additionalMaterial;
+
+    public AdditionalMaterialDecorator(ICourse course, IAdditionalMaterial additionalMaterial)
+    {
+        _course = course;
+        _additionalMaterial = additionalMaterial;
+    }
+
+    public void Enroll()
+    {
+        _course.Enroll();
+        _additionalMaterial.AddMaterial();
+    }
+}
+
 // Клиентский код
 class Program
 {
@@ -82,12 +124,15 @@ class Program
         var classroomCourse = classroomCourseFactory.CreateCourse();
         var selfStudyCourse = selfStudyCourseFactory.CreateCourse();
 
+        // Добавление дополнительных материалов к курсам
+        onlineCourse = new AdditionalMaterialDecorator(onlineCourse, new VideoMaterial());
+        classroomCourse = new AdditionalMaterialDecorator(classroomCourse, new FileMaterial());
+
         // Запись на курсы
         onlineCourse.Enroll();
         classroomCourse.Enroll();
         selfStudyCourse.Enroll();
 
-        Console.ReadLine();
-        Console.ReadLine();
+        Console.ReadLine(); 
     }
 }
